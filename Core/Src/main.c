@@ -23,6 +23,9 @@
 /* USER CODE BEGIN Includes */
 #include "stdio.h"
 
+#include "GAUL_Drivers/BMP280.h"
+#include "GAUL_Drivers/Tests/BMP280_tests.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,6 +47,7 @@
 SPI_HandleTypeDef hspi2;
 
 /* USER CODE BEGIN PV */
+BMP280 bmp_data;
 
 /* USER CODE END PV */
 
@@ -92,6 +96,21 @@ int main(void)
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
 
+  // SPI Bug Fix
+  /* Note page 704/1136 RM0008 Rev 21 :
+   * The idle state of SCK must correspond to the polarity selected in the
+   * SPI_CR1 register (by pulling up SCK if CPOL=1 or pulling down SCK if CPOL=0).
+   */
+  uint8_t dummy = 0x00;
+  HAL_SPI_Transmit(&hspi2, &dummy, 1, 1000);
+
+  // Barometer
+  if (BMP280_Init(&bmp_data, &hspi2) != 0) {
+    printf("BMP280 Initialization Error\r\n");
+    // TODO: Buzzer or led 10 sec
+    return -1; // Error
+  }
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -101,6 +120,10 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
+    BMP280_TESTS_LogSTLINK();
+
+    HAL_Delay(100);
   }
   /* USER CODE END 3 */
 }

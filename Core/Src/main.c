@@ -128,7 +128,8 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-    BMP280_TESTS_LogSTLINK();
+    //BMP280_TESTS_LogSTLINK();
+    BMP280_TESTS_LogUART(&huart1);
 
     HAL_Delay(1000);
   }

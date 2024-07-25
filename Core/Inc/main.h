@@ -57,8 +57,16 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define GPS_TX_Pin GPIO_PIN_2
+#define GPS_TX_GPIO_Port GPIOA
+#define GPS_RX_Pin GPIO_PIN_3
+#define GPS_RX_GPIO_Port GPIOA
 #define BMP_CS_Pin GPIO_PIN_8
 #define BMP_CS_GPIO_Port GPIOA
+#define RFD_TX_Pin GPIO_PIN_6
+#define RFD_TX_GPIO_Port GPIOB
+#define RFD_RX_Pin GPIO_PIN_7
+#define RFD_RX_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

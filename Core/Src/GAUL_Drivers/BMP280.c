@@ -1,8 +1,9 @@
 /*
  * BMP280.h
  *
- * BMP280 is a barometer used to get the precise altitude of the rocket.
- * Main functions are "BMP280_Init" to configure BMP280, and "BMP280_ReadAltitude".
+ * BMP280 is a barometer used to get the altitude of the rocket.
+ * Main functions are "BMP280_Init" to configure BMP280, and "BMP280_ReadAltitude"
+ * to update values in a BMP280 structure.
  *
  *  Created on: May 18, 2024
  *      Author: gagnon
@@ -140,7 +141,8 @@ int8_t BMP280_ReadCalibrationData(BMP280 *BMP_data) {
 }
 
 /**
- * Set reference temperature and pressure for altitude calculation by averaging temperature and pressure measurements.
+ * Set reference temperature and pressure for altitude calculation by averaging
+ * temperature and pressure measurements.
  *
  * @param BMP_data: pointer to a BMP280 structure.
  * @param samples: Number of measurements to average..
@@ -306,7 +308,7 @@ int8_t BMP280_SoftReset() {
  * @retval -1 SPI ERROR
  */
 int8_t BMP280_Read(uint8_t reg, uint8_t RX_Buffer[], uint8_t size) {
-    // BMP_CS LOW
+    // Enable SPI communication with BMP280 by setting BMP280's Chip Select (CS) pin to LOW.
     HAL_GPIO_WritePin(BMP_CS_GPIO_Port, BMP_CS_Pin, GPIO_PIN_RESET);
 
     // Transmit Control byte (Read mode + Register address)
@@ -320,7 +322,7 @@ int8_t BMP280_Read(uint8_t reg, uint8_t RX_Buffer[], uint8_t size) {
     	return -1; // SPI ERROR
     }
 
-    // BMP_CS HIGH
+    // Disable SPI communication with BMP280 by setting BMP280's Chip Select (CS) pin to HIGH.
     HAL_GPIO_WritePin(BMP_CS_GPIO_Port, BMP_CS_Pin, GPIO_PIN_SET);
 
     return 0; // OK

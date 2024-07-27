@@ -63,6 +63,8 @@ void Error_Handler(void);
 #define GPS_RX_GPIO_Port GPIOA
 #define BMP_CS_Pin GPIO_PIN_8
 #define BMP_CS_GPIO_Port GPIOA
+#define DEBUG_Pin GPIO_PIN_5
+#define DEBUG_GPIO_Port GPIOB
 #define RFD_TX_Pin GPIO_PIN_6
 #define RFD_TX_GPIO_Port GPIOB
 #define RFD_RX_Pin GPIO_PIN_7

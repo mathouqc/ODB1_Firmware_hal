@@ -104,14 +104,6 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  // SPI Bug Fix
-  /* Note page 704/1136 RM0008 Rev 21 :
-   * The idle state of SCK must correspond to the polarity selected in the
-   * SPI_CR1 register (by pulling up SCK if CPOL=1 or pulling down SCK if CPOL=0).
-   */
-  uint8_t dummy = 0x00;
-  HAL_SPI_Transmit(&hspi2, &dummy, 1, 1000);
-
   // Barometer
   if (BMP280_Init(&bmp_data, &hspi2) != 0) {
     printf("BMP280 Initialization Error\r\n");

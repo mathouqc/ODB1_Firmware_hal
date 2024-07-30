@@ -25,6 +25,7 @@
 
 #include "GAUL_Drivers/BMP280.h"
 #include "GAUL_Drivers/Tests/BMP280_tests.h"
+#include "GAUL_Drivers/Tests/NMEA_tests.h"
 
 /* USER CODE END Includes */
 
@@ -118,6 +119,12 @@ int main(void)
     return -1; // Error
   }
 
+  // NMEA tests
+  NMEA_TESTS_ValidateRMC_LogSTLINK();
+  NMEA_TESTS_ParseRMC_LogSTLINK();
+
+  printf("Initialization success\r\n");
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -128,7 +135,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-    BMP280_TESTS_LogSTLINK();
+    //BMP280_TESTS_LogSTLINK();
     //BMP280_TESTS_LogUART(&huart1);
 
     HAL_Delay(1000);

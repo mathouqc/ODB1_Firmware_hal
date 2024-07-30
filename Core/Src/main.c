@@ -24,8 +24,11 @@
 #include "stdio.h"
 
 #include "GAUL_Drivers/BMP280.h"
+#include "GAUL_Drivers/L76LM33.h"
+
 #include "GAUL_Drivers/Tests/BMP280_tests.h"
 #include "GAUL_Drivers/Tests/NMEA_tests.h"
+#include "GAUL_Drivers/Tests/L76LM33_tests.h"
 
 /* USER CODE END Includes */
 
@@ -52,6 +55,7 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 BMP280 bmp_data;
+L76LM33 L76_data;
 
 /* USER CODE END PV */
 
@@ -111,9 +115,16 @@ int main(void)
     return -1; // Error
   }
 
+  // GNSS module
+  if (L76LM33_Init(&huart2) != 0) {
+    printf("L76LM33 Initialization Error\r\n");
+    // TODO: Buzzer or led 10 sec
+    return -1; // Error
+  }
+
   // NMEA tests
-  NMEA_TESTS_ValidateRMC_LogSTLINK();
-  NMEA_TESTS_ParseRMC_LogSTLINK();
+  //NMEA_TESTS_ValidateRMC_LogSTLINK();
+  //NMEA_TESTS_ParseRMC_LogSTLINK();
 
   printf("Initialization success\r\n");
 
@@ -127,10 +138,14 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
+    // BMP
     //BMP280_TESTS_LogSTLINK();
-    //BMP280_TESTS_LogUART(&huart1);
 
-    HAL_Delay(1000);
+    // L76LM33
+    //L76LM33_TESTS_ReadSentence_LogSTLINK();
+    L76LM33_TESTS_ReadSentence_LogUART(&huart1);
+
+    HAL_Delay(200);
   }
   /* USER CODE END 3 */
 }
@@ -329,6 +344,10 @@ int _write(int file, char *ptr, int len)
     ITM_SendChar(*ptr++);
   }
   return len;
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+  L76LM33_RxCallback(huart);
 }
 /* USER CODE END 4 */
 

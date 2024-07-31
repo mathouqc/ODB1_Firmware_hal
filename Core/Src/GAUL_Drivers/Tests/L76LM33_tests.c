@@ -57,4 +57,5 @@ void L76LM33_TESTS_LogStructure(L76LM33 *L76_data) {
 	printf("Fix:  %s\n", L76_data->fix == 1 ? "Yes" : "No");
 	printf("Lat:  %f\n", L76_data->latitude);
 	printf("Lon:  %f\n", L76_data->longitude);
+	printf("\n");
 }

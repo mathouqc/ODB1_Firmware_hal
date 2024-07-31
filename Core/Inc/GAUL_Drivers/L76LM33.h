@@ -13,7 +13,7 @@
 #ifndef INC_GAUL_DRIVERS_L76LM33_H_
 #define INC_GAUL_DRIVERS_L76LM33_H_
 
-#define L76LM33_BUFFER_SIZES 128  // NMEA sentence is around 80 char max, has to be a power of two.
+#define L76LM33_BUFFER_SIZES 256  // NMEA sentence is around 80 char max, has to be a power of two.
 #define L76LM33_UART_TIMEOUT 1000 // For UART transmit
 
 typedef struct {

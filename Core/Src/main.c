@@ -143,7 +143,8 @@ int main(void)
 
     // L76LM33
     //L76LM33_TESTS_ReadSentence_LogSTLINK();
-    L76LM33_TESTS_ReadSentence_LogUART(&huart1);
+    //L76LM33_TESTS_ReadSentence_LogUART(&huart1);
+    L76LM33_TESTS_Read_LogSTLINK();
 
     HAL_Delay(200);
   }

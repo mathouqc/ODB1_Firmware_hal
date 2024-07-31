@@ -51,4 +51,8 @@ void loop() {
   Serial.println(i, DEC);
   i++;
   delay(1200);
+
+  if (i >= 900) {
+    i = 0;
+  }
 }

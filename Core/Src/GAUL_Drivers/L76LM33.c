@@ -31,6 +31,9 @@ uint8_t L76_receivedByte;
 ring_buffer_t L76_UART_Buffer;
 char L76_UART_Buffer_arr[L76LM33_BUFFER_SIZES];
 
+// 1: line is available in UART buffer, 0: line is not available in UART buffer
+uint8_t L76_new_line = 0;
+
 // Buffer to store NMEA sentence
 uint8_t L76_NMEA_Buffer[L76LM33_BUFFER_SIZES];
 
@@ -94,6 +97,9 @@ void L76LM33_RxCallback(UART_HandleTypeDef *huart) {
 	if (huart->Instance == L76_huart->Instance) {
 		// Add data to circular buffer
 		ring_buffer_queue(&L76_UART_Buffer, L76_receivedByte);
+		if (L76_receivedByte == '\n') {
+			L76_new_line = 1;
+		}
 		// Receive UART data with interrupts
 		HAL_UART_Receive_IT(L76_huart, &L76_receivedByte, 1);
 	}
@@ -151,9 +157,12 @@ int8_t L76LM33_Read(L76LM33 *L76_data) {
  *
  */
 int8_t L76LM33_ReadSentence() {
-	if (ring_buffer_is_empty(&L76_UART_Buffer) == 1) {
+	if (L76_new_line == 0) {
 		return -2; // Error, empty UART circular buffer
 	}
+
+	// Reset flag
+	L76_new_line = 0;
 
 	// Clear NMEA buffer
 	for (int16_t i = 0; i < sizeof(L76_NMEA_Buffer); i++) {

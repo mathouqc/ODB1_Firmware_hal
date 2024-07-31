@@ -16,7 +16,7 @@
 #define BMP_CS_Pin              GPIO_PIN_8
 #define BMP_CS_GPIO_Port        GPIOA
 
-#define BMP280_SPI_TIMEOUT      1000
+#define BMP280_SPI_TIMEOUT      100
 
 #define BMP280_DEVICE_ID        0x58
 #define BMP280_RESET_VALUE      0xB6

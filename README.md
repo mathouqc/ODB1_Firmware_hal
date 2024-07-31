@@ -82,10 +82,10 @@ Faire des commits qui traitent un problème ou une fonctionnalité à la fois, e
 ## Driver disponible
 
 - Altimètre BMP280
+- Module GNSS L76-LM33
 
 ## TODO
 
-- Driver pour le module GNSS L76-LM33
 - Driver pour la carte SD
 - Driver pour l'accéléromètre ICM20602
 - Calculer la vitesse verticale avec le BMP280

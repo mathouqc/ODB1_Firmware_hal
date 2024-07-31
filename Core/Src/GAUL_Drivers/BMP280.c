@@ -182,6 +182,8 @@ int8_t BMP280_MeasureReference(BMP280 *BMP_data, uint16_t samples, uint8_t delay
 /**
  * Reads temperature registers, then calculate temperature in Celsius from calibration data.
  *
+ * Takes 0.05ms to complete
+ *
  * @param BMP_data: pointer to a BMP280 structure.
  *
  * @retval 0 OK
@@ -211,6 +213,8 @@ int8_t BMP280_ReadTemperature(BMP280 *BMP_data) {
 
 /**
  * Reads pressure registers, then calculate pressure in Pascal from calibration data.
+ *
+ * Takes 0.05ms to complete
  *
  * @param BMP_data: pointer to a BMP280 structure.
  *
@@ -254,7 +258,7 @@ int8_t BMP280_ReadPressure(BMP280 *BMP_data) {
  * Reads temperature and pressure values from the BMP280,
  * then calculate the altitude from them.
  *
- * Takes 0.6ms to complete
+ * Takes 0.3ms to complete
  *
  * @param BMP_data: pointer to a BMP280 structure.
  *
@@ -277,6 +281,8 @@ int8_t BMP280_ReadAltitude(BMP280 *BMP_data) {
 
 /**
  * Get the altitude from a pressure value using a formula from Bosch Q&A
+ *
+ * Takes 0.2ms to complete
  *
  * @param pressure: Current pressure in Pascal.
  * @param pressure_ref: Reference pressure in Pascal.

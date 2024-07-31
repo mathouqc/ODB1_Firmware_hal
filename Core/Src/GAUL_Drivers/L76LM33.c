@@ -109,6 +109,8 @@ void L76LM33_RxCallback(UART_HandleTypeDef *huart) {
  * Read and parse a NMEA GPRMC sentence into data structure. Call this function
  * frequently to have the latest GPS data available.
  *
+ * Takes 0.3ms to complete when buffer is full
+ *
  * @param L76_data: pointer to a L76LM33 structure to update.
  *
  * @retval 0 OK
@@ -150,6 +152,8 @@ int8_t L76LM33_Read(L76LM33 *L76_data) {
 
 /**
  * Read NMEA sentence from UART circular buffer into a NMEA buffer.
+ *
+ * Takes 0.24ms to complete when buffer is full
  *
  * @retval 0 OK
  * @retval -1 Error, cannot find starting or ending character.

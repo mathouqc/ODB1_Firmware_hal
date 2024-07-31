@@ -21,6 +21,8 @@
  * Validate the NMEA sentence ID is RMC ($xxRMC).
  * $GNRMC,080608.000,A,3029.461489,N,11430.072002,E,0.00,148.41,210423,,,D,V*09
  *
+ * Takes 0.002ms to complete
+ *
  * @param nmea_sentence: pointer to sentence array.
  *
  * @retval 0 RMC sentence
@@ -36,6 +38,8 @@ int8_t NMEA_ValidateRMC(const char *nmea_sentence) {
  *
  * Latitude and longitude are 0.0 if there's no GPS fix.
  * See GPS_Data struct for more details.
+ *
+ * Takes 0.13ms to complete
  *
  * @param nmea_sentence: pointer to sentence array.
  * @param gps_data: pointer to structure to fill with parsed data.

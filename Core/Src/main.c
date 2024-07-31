@@ -24,7 +24,11 @@
 #include "stdio.h"
 
 #include "GAUL_Drivers/BMP280.h"
+#include "GAUL_Drivers/L76LM33.h"
+
 #include "GAUL_Drivers/Tests/BMP280_tests.h"
+#include "GAUL_Drivers/Tests/NMEA_tests.h"
+#include "GAUL_Drivers/Tests/L76LM33_tests.h"
 
 /* USER CODE END Includes */
 
@@ -51,6 +55,7 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 BMP280 bmp_data;
+L76LM33 L76_data;
 
 /* USER CODE END PV */
 
@@ -103,20 +108,25 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  // SPI Bug Fix
-  /* Note page 704/1136 RM0008 Rev 21 :
-   * The idle state of SCK must correspond to the polarity selected in the
-   * SPI_CR1 register (by pulling up SCK if CPOL=1 or pulling down SCK if CPOL=0).
-   */
-  uint8_t dummy = 0x00;
-  HAL_SPI_Transmit(&hspi2, &dummy, 1, 1000);
-
   // Barometer
   if (BMP280_Init(&bmp_data, &hspi2) != 0) {
     printf("BMP280 Initialization Error\r\n");
     // TODO: Buzzer or led 10 sec
     return -1; // Error
   }
+
+  // GNSS module
+  if (L76LM33_Init(&huart2) != 0) {
+    printf("L76LM33 Initialization Error\r\n");
+    // TODO: Buzzer or led 10 sec
+    return -1; // Error
+  }
+
+  // NMEA tests
+  //NMEA_TESTS_ValidateRMC_LogSTLINK();
+  //NMEA_TESTS_ParseRMC_LogSTLINK();
+
+  printf("Initialization success\r\n");
 
   /* USER CODE END 2 */
 
@@ -128,10 +138,15 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-    BMP280_TESTS_LogSTLINK();
-    //BMP280_TESTS_LogUART(&huart1);
+    // BMP
+    //BMP280_TESTS_LogSTLINK();
 
-    HAL_Delay(1000);
+    // L76LM33
+    //L76LM33_TESTS_ReadSentence_LogSTLINK();
+    //L76LM33_TESTS_ReadSentence_LogUART(&huart1);
+    L76LM33_TESTS_Read_LogSTLINK();
+
+    HAL_Delay(200);
   }
   /* USER CODE END 3 */
 }
@@ -298,12 +313,22 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(BMP_CS_GPIO_Port, BMP_CS_Pin, GPIO_PIN_SET);
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(DEBUG_GPIO_Port, DEBUG_Pin, GPIO_PIN_RESET);
+
   /*Configure GPIO pin : BMP_CS_Pin */
   GPIO_InitStruct.Pin = BMP_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(BMP_CS_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : DEBUG_Pin */
+  GPIO_InitStruct.Pin = DEBUG_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(DEBUG_GPIO_Port, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
@@ -320,6 +345,10 @@ int _write(int file, char *ptr, int len)
     ITM_SendChar(*ptr++);
   }
   return len;
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+  L76LM33_RxCallback(huart);
 }
 /* USER CODE END 4 */
 

@@ -38,6 +38,14 @@ uint8_t BMP_RX_Buffer[26];
  * @retval -1 ERROR
  */
 int8_t BMP280_Init(BMP280 *BMP_data, SPI_HandleTypeDef *hspi) {
+	// SPI Bug Fix
+	/* Note page 704/1136 RM0008 Rev 21 :
+	* The idle state of SCK must correspond to the polarity selected in the
+	* SPI_CR1 register (by pulling up SCK if CPOL=1 or pulling down SCK if CPOL=0).
+	*/
+	uint8_t dummy = 0x00;
+	HAL_SPI_Transmit(hspi, &dummy, 1, 1000);
+
 	// Set BMP280 SPI handler
 	BMP_hspi = hspi;
 
